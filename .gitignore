@@ -1,0 +1,4 @@
+MNIST/**
+*/__pycache__/**
+docker_run.sh
+sparsity_out.txt
