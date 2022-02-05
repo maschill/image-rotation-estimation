@@ -4,7 +4,7 @@ import torch.nn as nn
 from torch.nn.functional import threshold
 from typing import Callable
 
-from  kwinners import Kwinners2d
+from kwinners import Kwinners2d
 
 
 class Residual(nn.Module):
@@ -41,7 +41,7 @@ def convmixer(
         sparsity (float, optional): percentage of values > 0. Defaults to 0.025.
 
     Returns:
-        [type]: [description]
+        nn.Module: the Convmixer model
     """
     k = max(4, int(dim * sparsity))
     return nn.Sequential(
