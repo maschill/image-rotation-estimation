@@ -1,4 +1,8 @@
 MNIST/**
 */__pycache__/**
+__pycache__/**
 docker_run.sh
 sparsity_out.txt
+sparsity_out.csv
+cifar-10-batches-py/**
+cifar-10-python.tar.gz

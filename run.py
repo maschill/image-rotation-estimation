@@ -11,6 +11,7 @@ from tqdm import tqdm
 from convmixer import convmixer
 from generate_plot import draw
 from mnist import Mnist
+from CIFAR10 import Cifar10
 from resnet import resnet
 
 
@@ -82,8 +83,8 @@ def run_convmixer(
     Returns:
         acc (int): test accuracy of final epoch
     """
-    ds = Mnist(train=True)
-    val_ds = Mnist(train=False)
+    ds = Cifar10(train=True)
+    val_ds = Cifar10(train=False)
     device = torch.device("cuda")
     batch_size = 128
     num_epochs = 7
@@ -98,10 +99,16 @@ def run_convmixer(
 
     dl = {"train": train_loader, "val": val_loader}
 
-    model = convmixer(dim=512, depth=4, n_classes=2, sparsity=sparsity)
+    model = convmixer(
+        dim=1024,
+        depth=16,
+        n_classes=2,
+        sparsity=sparsity,
+        input_channels=ds.input_channels,
+    )
     model = model.to(device)
     if print_summary:
-        summary(model, (1, 28, 28))
+        summary(model, (ds.input_channels, 28, 28))
 
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -163,7 +170,7 @@ if __name__ == "__main__":
     results = []
     times = []
     s = [i / 100.0 for i in range(1, 101)]
-    for sparsity in [0.001] + s:
+    for sparsity in [0.001, .01, .1, .2, .5, 1.]:
         t0 = time.time()
         acc = run_convmixer(sparsity)
         t1 = time.time()

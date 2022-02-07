@@ -5,14 +5,14 @@ from torchvision import datasets, transforms
 from random import randint
 
 
-class Mnist(torch.utils.data.Dataset):
+class Cifar10(torch.utils.data.Dataset):
     """Dataloader for MNIST rotation estimation"""
 
     def __init__(self, train: bool) -> None:
-        self.input_channels = 1
-        self.mean = (0.4913997551666284, 0.48215855929893703, 0.4465309133731618)
-        self.std = (0.24703225141799082, 0.24348516474564, 0.26158783926049628)
-        self.ds = datasets.MNIST(root=".", train=train, download=True)
+        self.input_channels = 3
+        self.mean = 0.1307
+        self.std = 0.3081
+        self.ds = datasets.CIFAR10(root=".", train=train, download=True)
         self.size = len(self.ds)
         self.transforms = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize(self.mean, self.std),]

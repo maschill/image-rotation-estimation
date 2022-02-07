@@ -28,6 +28,7 @@ def convmixer(
     patch_size: int = 7,
     n_classes: int = 10,
     sparsity: float = 0.025,
+    input_channels: int = 1
 ):
     """creates a convmixer model with sparsity as seen on 
     https://github.com/tmp-iclr/convmixer/blob/main/convmixer.py
@@ -39,13 +40,14 @@ def convmixer(
         patch_size (int, optional): patch size. Defaults to 7.
         n_classes (int, optional): size of output vector. Defaults to 10.
         sparsity (float, optional): percentage of values > 0. Defaults to 0.025.
+        input_channels (int, optional): channels of image e.g. 3 for RGB. Defaults to 1. 
 
     Returns:
         nn.Module: the Convmixer model
     """
     k = max(4, int(dim * sparsity))
     return nn.Sequential(
-        nn.Conv2d(1, dim, kernel_size=patch_size, stride=patch_size),
+        nn.Conv2d(input_channels, dim, kernel_size=patch_size, stride=patch_size),
         nn.GELU(),
         nn.BatchNorm2d(dim),
         *[

@@ -11,7 +11,7 @@ def draw():
     ax0.plot(data[:, 0], data[:, 1], color="red", label="accuracy")
     ax0.set_ylabel("final test accuracy")
     ax0.set_xlabel("sparsity")
-    ax0.set_ylim([0.9, 1.0])
+    ax0.set_ylim([0.4, 1.0])
 
     ax1 = ax0.twinx()
     ax1.plot(data[:, 0], data[:, 2], color="green", label="time")
