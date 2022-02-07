@@ -88,6 +88,7 @@ def run_convmixer(
     device = torch.device("cuda")
     batch_size = 128
     num_epochs = 7
+    sparsity = min(sparsity, 1.0)
 
     train_loader = torch.utils.data.DataLoader(
         ds, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=4
@@ -101,7 +102,7 @@ def run_convmixer(
 
     model = convmixer(
         dim=1024,
-        depth=16,
+        depth=8,
         n_classes=2,
         sparsity=sparsity,
         input_channels=ds.input_channels,
@@ -169,8 +170,8 @@ def run_convmixer(
 if __name__ == "__main__":
     results = []
     times = []
-    s = [i / 100.0 for i in range(1, 101)]
-    for sparsity in [0.001, .01, .1, .2, .5, 1.]:
+    s = [i / 100.0 for i in range(1, 101,5)]
+    for sparsity in [0.001]+s:
         t0 = time.time()
         acc = run_convmixer(sparsity)
         t1 = time.time()
