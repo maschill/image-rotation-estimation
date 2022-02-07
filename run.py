@@ -7,9 +7,11 @@ import torch.optim as optim
 from torchsummary import summary
 from tqdm import tqdm
 
+
+from convmixer import convmixer
+from generate_plot import draw
 from mnist import Mnist
 from resnet import resnet
-from convmixer import convmixer
 
 
 def print_outputs(outputs: torch.Tensor, labels: torch.Tensor):
@@ -159,17 +161,22 @@ def run_convmixer(
 
 if __name__ == "__main__":
     results = []
+    times = []
     s = [i / 100.0 for i in range(1, 101)]
-    for sparsity in [0.001]:
+    for sparsity in [0.001] + s:
+        t0 = time.time()
         acc = run_convmixer(sparsity)
+        t1 = time.time()
         results.append(acc)
+        times.append(t1 - t0)
 
-    with open("sparsity_out.txt", "w", newline="") as file:
+    with open("sparsity_out.csv", "w", newline="") as file:
         writer = csv.writer(file)
 
         print("----------+---------------------")
         print(" Sparsity | Final Test Accuracy")
         print("----------+---------------------")
-        for sparsity, acc in zip(s, results):
+        for sparsity, acc, t in zip(s, results, times):
             print(f" {sparsity:8.5} | {acc:7.5}")
-            writer.writerow([sparsity, f"{acc:.7}"])
+            writer.writerow([sparsity, f"{acc:.7}", f"{t:.4}"])
+    draw()
